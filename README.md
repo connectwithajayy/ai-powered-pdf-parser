@@ -1,8 +1,14 @@
-# PDF to JSON Invoice Parser
+# AI InvoiceLens: PDF to JSON Parser
 
-This command-line tool reads a text-based invoice PDF and creates a readable
-JSON file containing the invoice number, date, products, prices, totals, and
-the original extracted text.
+**AI InvoiceLens** transforms invoice PDFs into clean, structured JSON that is
+easy for people to read and ready for business applications. Extract invoice
+numbers, dates, products, prices, taxes, totals, and the original document
+text in seconds.
+
+> **Powered by the open AI model:**
+> `liquid/lfm-2.5-embedding-350m:free`
+
+The model was used through OpenRouter in the AI-enabled embedding workflow.
 
 ## Requirements
 
@@ -21,8 +27,10 @@ pip install pypdf
 
 ## AI Model Information
 
-The AI embedding version of this project used the open model
-`liquid/lfm-2.5-embedding-350m:free` through OpenRouter.
+### `liquid/lfm-2.5-embedding-350m:free`
+
+This is the open embedding model used by the AI-enabled version of
+AI InvoiceLens through OpenRouter.
 
 The current `pdf_to_json.py` version only extracts and structures PDF text
 locally. It does not call an AI model, so an OpenRouter key is not required
