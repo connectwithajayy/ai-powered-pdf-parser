@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620">
+  <rect width="900" height="620" fill="#eeeeee"/>
+  <rect x="90" y="30" width="720" height="560" fill="#ffffff"/>
+  <text x="130" y="85" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#222222">INVOICE</text>
+  <text x="130" y="120" font-family="Arial, sans-serif" font-size="16" fill="#555555">PAID</text>
+  <text x="130" y="165" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#222222">INV-2026-001</text>
+  <text x="540" y="165" font-family="Arial, sans-serif" font-size="16" fill="#333333">August 22, 2026</text>
+  <line x1="130" y1="190" x2="770" y2="190" stroke="#e33b32" stroke-width="4"/>
+  <text x="130" y="230" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#333333">ITEM</text>
+  <text x="610" y="230" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#333333">QTY</text>
+  <text x="690" y="230" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#333333">AMOUNT</text>
+  <line x1="130" y1="245" x2="770" y2="245" stroke="#cccccc"/>
+  <text x="130" y="280" font-family="Arial, sans-serif" font-size="16" fill="#222222">Standard Product A</text>
+  <text x="620" y="280" font-family="Arial, sans-serif" font-size="16" fill="#222222">1</text>
+  <text x="690" y="280" font-family="Arial, sans-serif" font-size="16" fill="#222222">$60.00</text>
+  <line x1="130" y1="300" x2="770" y2="300" stroke="#eeeeee"/>
+  <text x="130" y="335" font-family="Arial, sans-serif" font-size="16" fill="#222222">Standard Service B</text>
+  <text x="620" y="335" font-family="Arial, sans-serif" font-size="16" fill="#222222">1</text>
+  <text x="690" y="335" font-family="Arial, sans-serif" font-size="16" fill="#222222">$40.00</text>
+  <line x1="500" y1="390" x2="770" y2="390" stroke="#cccccc"/>
+  <text x="530" y="425" font-family="Arial, sans-serif" font-size="16" fill="#333333">Subtotal: $100.00</text>
+  <text x="530" y="455" font-family="Arial, sans-serif" font-size="16" fill="#333333">Tax: $0.00</text>
+  <text x="530" y="495" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#e33b32">Total: $100.00</text>
+  <text x="130" y="545" font-family="Arial, sans-serif" font-size="15" fill="#555555">Thank you for your business!</text>
+</svg>

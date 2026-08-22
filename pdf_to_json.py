@@ -11,6 +11,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+from datetime import datetime
 import json
 import re
 import sys
@@ -94,15 +95,22 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     file_path = args.file_path
+    generated_at = datetime.now().astimezone()
+    timestamp = generated_at.strftime("%Y%m%d_%H%M%S")
+    output_file = args.output or Path("output") / f"{file_path.stem}_{timestamp}.json"
+    generated_at_text = generated_at.isoformat(timespec="seconds")
+
+    output_file.parent.mkdir(parents=True, exist_ok=True)
 
     if not file_path.is_file():
         output_json(
             {
                 "success": False,
                 "file_path": str(file_path),
+                "generated_at": generated_at_text,
                 "error": f"PDF file not found: {file_path}",
             },
-            args.output,
+            output_file,
         )
         return 1
 
@@ -114,9 +122,10 @@ def main() -> int:
             {
                 "success": False,
                 "file_path": str(file_path),
+                "generated_at": generated_at_text,
                 "error": str(error),
             },
-            args.output,
+            output_file,
         )
         return 1
 
@@ -124,10 +133,11 @@ def main() -> int:
         {
             "success": True,
             "file_path": str(file_path),
+            "generated_at": generated_at_text,
             "invoice": invoice,
             "text": text,
         },
-        args.output,
+        output_file,
     )
     return 0
 
