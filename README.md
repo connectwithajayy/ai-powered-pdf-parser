@@ -19,6 +19,25 @@ Open PowerShell or a terminal in this project folder and run:
 pip install pypdf
 ```
 
+## AI Model Information
+
+The AI embedding version of this project used the open model
+`liquid/lfm-2.5-embedding-350m:free` through OpenRouter.
+
+The current `pdf_to_json.py` version only extracts and structures PDF text
+locally. It does not call an AI model, so an OpenRouter key is not required
+for PDF-to-JSON conversion and there is no payment required to use this tool.
+
+If a future AI-enabled version is used, create a `.env` file in the project
+folder and add your own OpenRouter key:
+
+```dotenv
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+```
+
+Never commit `.env` or share the key publicly. The `.gitignore` file already
+excludes `.env` from Git.
+
 ## Convert a PDF
 
 Save the PDF inside the `file` folder, then run:
@@ -27,9 +46,6 @@ Save the PDF inside the `file` folder, then run:
 python pdf_to_json.py file/invoice.pdf --output invoice.json
 ```
 
-The `--output` option is optional. Without it, the tool creates a timestamped
-file next to the input PDF, such as `file/invoice_20260822_140601.json`, and
-prints the JSON in the terminal:
 The `--output` option is optional. Without it, the tool creates an `output`
 folder and saves a timestamped file there, such as
 `output/invoice_20260822_140601.json`. It also prints the JSON in the terminal:
