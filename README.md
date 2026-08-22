@@ -1,9 +1,11 @@
-# AI InvoiceLens: PDF to JSON Parser
+# AI InvoiceLens: Free PDF to JSON Invoice Parser
+
+> **Free to use. No subscription. No payment required.**
 
 **AI InvoiceLens** transforms invoice PDFs into clean, structured JSON that is
 easy for people to read and ready for business applications. Extract invoice
 numbers, dates, products, prices, taxes, totals, and the original document
-text in seconds.
+text in seconds at no cost.
 
 > **Powered by the open AI model:**
 > `liquid/lfm-2.5-embedding-350m:free`
