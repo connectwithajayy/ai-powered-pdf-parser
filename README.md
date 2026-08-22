@@ -1,23 +1,40 @@
-# AI InvoiceLens: Free PDF to JSON Invoice Parser
+# AI InvoiceLens: PDF to Text to JSON Invoice Parser
 
-> **Free to use. No subscription. No payment required.**
+**AI InvoiceLens** extracts invoice text from a PDF, cleans the extracted content,
+and sends the relevant text to an AI model through OpenRouter to return clean,
+structured JSON.
 
-**AI InvoiceLens** transforms invoice PDFs into clean, structured JSON that is
-easy for people to read and ready for business applications. Extract invoice
-numbers, dates, products, prices, taxes, totals, and the original document
-text in seconds at no cost.
+This project uses a two-step workflow:
 
-> **Powered by the open AI model:**
-> `liquid/lfm-2.5-embedding-350m:free`
+1. PDF to text using `pypdf`
+2. Text to JSON using a model prompt and JSON response format
 
-The model was used through OpenRouter in the AI-enabled embedding workflow.
+> ## **AI Model: `nvidia/nemotron-3.5-lightning:free`**
+
+## Approach
+
+**Active model:** `nvidia/nemotron-3.5-lightning:free`
+
+The current workflow is intentionally designed to keep token usage low:
+
+- Read the PDF with `pypdf`
+- Extract page text
+- Clean noisy lines like page numbers and repeated separators
+- Reduce the text to the relevant invoice data
+- Send the formatted text to the OpenRouter model
+- Ask the model to return valid JSON only
+
+This reduces the amount of text sent to the model and makes the output more
+reliable for invoice parsing.
 
 ## Requirements
 
 - Python 3.10 or newer
-- A text-based PDF invoice
+- `pypdf`
+- A valid OpenRouter API key
+- A model that is allowed for your OpenRouter account
 
-Scanned or image-only PDFs need OCR before this tool can extract their text.
+Scanned or image-only PDFs may need OCR first before text extraction is useful.
 
 ## Installation
 
@@ -27,22 +44,11 @@ Open PowerShell or a terminal in this project folder and run:
 pip install pypdf
 ```
 
-## AI Model Information
-
-### `liquid/lfm-2.5-embedding-350m:free`
-
-This is the open embedding model used by the AI-enabled version of
-AI InvoiceLens through OpenRouter.
-
-The current `pdf_to_json.py` version only extracts and structures PDF text
-locally. It does not call an AI model, so an OpenRouter key is not required
-for PDF-to-JSON conversion and there is no payment required to use this tool.
-
-If a future AI-enabled version is used, create a `.env` file in the project
-folder and add your own OpenRouter key:
+Create a `.env` file in the project folder:
 
 ```dotenv
 OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_MODEL=nvidia/nemotron-3.5-lightning:free  # AI model
 ```
 
 Never commit `.env` or share the key publicly. The `.gitignore` file already
@@ -64,46 +70,68 @@ folder and saves a timestamped file there, such as
 python pdf_to_json.py file/invoice.pdf
 ```
 
+To include the AI JSON extraction step, use:
+
+```bash
+python pdf_to_json.py file/invoice.pdf --use-ai --output invoice.json
+```
+
 Windows paths can also be written with forward slashes:
 
 ```bash
-python pdf_to_json.py "C:/Documents/my-invoice.pdf" --output my-invoice.json
+python pdf_to_json.py "C:/Documents/my-invoice.pdf" --use-ai --output my-invoice.json
+```
+
+## Workflow Example
+
+```text
+PDF file
+  -> pypdf extracts text
+  -> clean extraneous lines
+  -> send compact text to OpenRouter
+  -> model returns structured JSON
 ```
 
 ## Example Output
 
-Sample invoice preview:
-
-![Sample invoice preview](file/invoice-preview.svg)
-
-The values visible in the invoice are converted into the matching JSON
-fields below:
-
 ```json
 {
-	"success": true,
-	"file_path": "file/invoice.pdf",
-	"generated_at": "2026-08-22T14:06:01+05:30",
-	"invoice": {
-		"invoice_number": "INV-2026-001",
-		"date": "August 22, 2026",
-		"products": [
-			{
-				"item": "Standard Product A",
-				"quantity": 1,
-				"price": 60.0
-			},
-			{
-				"item": "Standard Service B",
-				"quantity": 1,
-				"price": 40.0
-			}
-		],
-		"subtotal": 100.0,
-		"tax": 0.0,
-		"total": 100.0
-	},
-	"text": "The text extracted from the PDF..."
+  "success": true,
+  "file_path": "file/invoice.pdf",
+  "generated_at": "2026-08-22T14:06:01+05:30",
+  "invoice": {
+    "invoice_number": "INV-2026-001",
+    "date": "August 22, 2026",
+    "products": [
+      {
+        "item": "Standard Product A",
+        "quantity": 1,
+        "price": 60.0
+      }
+    ],
+    "subtotal": 100.0,
+    "tax": 0.0,
+    "total": 100.0
+  },
+  "text": "Invoice #INV-2026-001\nDate: August 22, 2026\n...",
+  "ai_invoice": {
+    "model": "nvidia/nemotron-3.5-lightning:free",
+    "json": {
+      "invoice_number": "INV-2026-001",
+      "date": "August 22, 2026",
+      "vendor": null,
+      "products": [
+        {
+          "item": "Standard Product A",
+          "quantity": 1,
+          "price": 60.0
+        }
+      ],
+      "subtotal": 100.0,
+      "tax": 0.0,
+      "total": 100.0
+    }
+  }
 }
 ```
 
@@ -114,9 +142,9 @@ If the file does not exist or cannot be read, the tool returns JSON with
 
 ```json
 {
-	"success": false,
-	"file_path": "file/missing.pdf",
-	"error": "PDF file not found: file/missing.pdf"
+  "success": false,
+  "file_path": "file/missing.pdf",
+  "error": "PDF file not found: file/missing.pdf"
 }
 ```
 
@@ -129,5 +157,5 @@ The parser looks for these labels and table columns:
 - Product rows containing item name, quantity, and dollar amount
 - `Subtotal`, `Tax (0%)`, and `Total Amount`
 
-Invoice layouts that use different labels may require changes to the parsing
-patterns in `pdf_to_json.py`.
+The AI path also accepts the extracted text and formats it into JSON with the
+keys above, which makes the workflow more flexible for different invoice layouts.
